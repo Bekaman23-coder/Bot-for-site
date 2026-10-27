@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebCraft AI — Искусство создания сайтов</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+    <style>
+        /* ... (стили остаются прежними) ... */
+        :root { --bg: #f4efe9; --text: #5c4a3d; --text-muted: #8c7a6b; --accent: #8b6b50; --card: #ffffff; --border: rgba(92, 74, 61, 0.15); --shadow: 0 15px 40px rgba(92, 74, 61, 0.08); }
+        [data-theme="dark"] { --bg: #1a1512; --text: #e8dfd5; --text-muted: #a39587; --accent: #c4a484; --card: #241e19; --border: rgba(232, 223, 213, 0.1); --shadow: 0 15px 40px rgba(0, 0, 0, 0.4); }
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: background-color 0.4s, color 0.4s, border-color 0.4s; }
+        html { scroll-behavior: smooth; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; line-height: 1.6; overflow-x: hidden; }
+        nav { position: fixed; top: 0; width: 100%; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; background: rgba(244, 239, 233, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); z-index: 1000; }
+        [data-theme="dark"] nav { background: rgba(26, 21, 18, 0.9); }
+        .logo { font-family: 'Bodoni Moda', serif; font-size: 1.8rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text); text-decoration: none; cursor: pointer; }
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--text-muted); font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--accent); }
+        .theme-btn { background: none; border: 1px solid var(--accent); color: var(--accent); padding: 8px 16px; border-radius: 0; cursor: pointer; font-family: 'Cormorant Garamond', serif; font-size: 1rem; letter-spacing: 1px; transition: 0.3s; }
+        .theme-btn:hover { background: var(--accent); color: var(--bg); }
+        header { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 120px 20px 60px; }
+        .hero-subtitle { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; letter-spacing: 4px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 20px; }
+        h1 { font-family: 'Bodoni Moda', serif; font-size: 5rem; font-weight: 700; line-height: 1.1; margin-bottom: 30px; max-width: 900px; color: var(--text); }
+        h1 span { color: var(--accent); font-style: italic; }
+        .hero-desc { font-size: 1.4rem; color: var(--text-muted); max-width: 600px; margin-bottom: 50px; }
+        .btn { display: inline-block; padding: 16px 40px; font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: 0.3s; border: 1px solid var(--text); color: var(--text); background: transparent; }
+        .btn-primary { background: var(--text); color: var(--bg); border: 1px solid var(--text); }
+        .btn-primary:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+        .btn-secondary:hover { background: var(--text); color: var(--bg); }
+        .section { padding: 100px 20px; max-width: 1000px; margin: 0 auto; text-align: center; }
+        .section-title { font-family: 'Bodoni Moda', serif; font-size: 3.5rem; margin-bottom: 20px; color: var(--text); }
+        .section-subtitle { font-size: 1.2rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 60px; }
+        .about-text { font-size: 1.5rem; line-height: 1.8; color: var(--text-muted); max-width: 800px; margin: 0 auto; }
+        .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 50px; }
+        .step { text-align: center; }
+        .step-number { font-family: 'Bodoni Moda', serif; font-size: 3rem; font-style: italic; color: var(--accent); margin-bottom: 15px; }
+        .step h3 { font-family: 'Bodoni Moda', serif; font-size: 1.8rem; margin-bottom: 15px; }
+        .step p { color: var(--text-muted); }
+        .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 60px; }
+        .review-card { background: var(--card); padding: 40px 30px; border: 1px solid var(--border); box-shadow: var(--shadow); text-align: left; position: relative; }
+        .review-quote { font-family: 'Bodoni Moda', serif; font-size: 4rem; color: var(--accent); opacity: 0.2; position: absolute; top: 10px; right: 20px; line-height: 1; }
+        .review-text { font-size: 1.2rem; font-style: italic; color: var(--text); margin-bottom: 20px; position: relative; z-index: 1; }
+        .review-author { font-family: 'Bodoni Moda', serif; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; font-size: 1rem; }
+        .pricing { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 40px; }
+        .price-card { background: var(--card); padding: 50px 30px; border: 1px solid var(--border); box-shadow: var(--shadow); position: relative; display: flex; flex-direction: column; }
+        .price-card h3 { font-family: 'Bodoni Moda', serif; font-size: 1.8rem; margin-bottom: 10px; }
+        .price { font-family: 'Bodoni Moda', serif; font-size: 3rem; font-weight: 700; margin-bottom: 20px; color: var(--accent); }
+        .price span { font-size: 1.2rem; color: var(--text-muted); }
+        .features { list-style: none; margin-bottom: 30px; flex-grow: 1; font-size: 1.1rem; color: var(--text-muted); }
+        .features li { margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        .cta-section { background: var(--text); color: var(--bg); padding: 100px 20px; text-align: center; }
+        [data-theme="dark"] .cta-section { background: var(--card); color: var(--text); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .cta-section h2 { font-family: 'Bodoni Moda', serif; font-size: 3.5rem; margin-bottom: 20px; }
+        .cta-section p { font-size: 1.4rem; margin-bottom: 40px; opacity: 0.8; }
+        .cta-section .btn { border-color: var(--bg); color: var(--bg); }
+        .cta-section .btn:hover { background: var(--bg); color: var(--text); }
+        [data-theme="dark"] .cta-section .btn { border-color: var(--text); color: var(--text); }
+        [data-theme="dark"] .cta-section .btn:hover { background: var(--text); color: var(--card); }
+        footer { padding: 40px 20px; text-align: center; border-top: 1px solid var(--border); font-size: 1rem; letter-spacing: 1px; color: var(--text-muted); text-transform: uppercase; }
+        @media (max-width: 768px) { h1 { font-size: 3rem; } .nav-links a { display: none; } .section-title { font-size: 2.5rem; } }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#" class="logo" onclick="window.scrollTo(0,0); return false;">WebCraft</a>
+        <div class="nav-links">
+            <a href="#about">О нас</a>
+            <a href="#how-it-works">Как работаем</a>
+            <a href="#reviews">Отзывы</a>
+            <a href="#pricing">Тарифы</a>
+            <a href="https://t.me/papijonofff_bot" target="_blank">Оставить заявку</a>
+            <button class="theme-btn" onclick="toggleTheme()">Тема</button>
+        </div>
+    </nav>
+
+    <header>
+        <div class="hero-subtitle">Proudly Present</div>
+        <h1>Искусство создания <br><span>идеальных сайтов</span></h1>
+        <p class="hero-desc">Мы объединили силу искусственного интеллекта и элегантность дизайна. Создайте свой цифровой шедевр за 30 секунд.</p>
+        <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
+            <a href="https://t.me/papijonofff_bot" target="_blank" class="btn btn-primary">Начать создание</a>
+            <a href="#how-it-works" class="btn btn-secondary">Узнать больше</a>
+        </div>
+    </header>
+
+    <section id="about" class="section">
+        <h2 class="section-title">О нас</h2>
+        <p class="section-subtitle">Наше видение</p>
+        <p class="about-text">WebCraft AI — это не просто генератор кода. Это ваш личный цифровой ателье. Мы верим, что каждый бизнес заслуживает премиального присутствия в интернете, не тратя на это месяцы разработки.</p>
+    </section>
+
+    <section id="how-it-works" class="section">
+        <h2 class="section-title">Процесс</h2>
+        <p class="section-subtitle">Три шага к совершенству</p>
+        <div class="steps">
+            <div class="step"><div class="step-number">I</div><h3>Выбор</h3><p>Выберите концепцию вашего будущего сайта из нашей коллекции.</p></div>
+            <div class="step"><div class="step-number">II</div><h3>Видение</h3><p>Опишите детали вашему персональному ИИ-дизайнеру.</p></div>
+            <div class="step"><div class="step-number">III</div><h3>Воплощение</h3><p>Получите готовый HTML-файл с безупречным кодом.</p></div>
+        </div>
+    </section>
+
+    <!-- СЕКЦИЯ ОТЗЫВОВ -->
+    <section id="reviews" class="section">
+        <h2 class="section-title">Отзывы</h2>
+        <p class="section-subtitle">Слова наших клиентов</p>
+        
+        <!-- Сюда будут загружаться отзывы из reviews.json -->
+        <div class="reviews-grid" id="reviews-container">
+            <p style="color: var(--text-muted); grid-column: 1 / -1;">Загрузка отзывов...</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Хотите оставить свой отзыв?</p>
+            <a href="https://t.me/papijonofff_bot" target="_blank" class="btn btn-primary">Оставить отзыв в боте</a>
+        </div>
+    </section>
+
+    <section id="pricing" class="section">
+        <h2 class="section-title">Тарифы</h2>
+        <p class="section-subtitle">Инвестиция в ваш успех</p>
+        <div class="pricing">
+            <div class="price-card"><h3>Эскиз</h3><div class="price">15 <span>⭐</span></div><ul class="features"><li>Один базовый сайт</li><li>Классический дизайн</li><li>Готовый HTML</li></ul><a href="https://t.me/papijonofff_bot" target="_blank" class="btn btn-secondary">Выбрать</a></div>
+            <div class="price-card"><h3>Шедевр</h3><div class="price">60 <span>⭐</span></div><ul class="features"><li>Пять базовых сайтов</li><li>Уникальная стилизация</li><li>Хранение в архиве</li></ul><a href="https://t.me/papijonofff_bot" target="_blank" class="btn btn-primary">Выбрать</a></div>
+            <div class="price-card"><h3>Ателье</h3><div class="price">140 <span>⭐</span></div><ul class="features"><li>Пять стандартных сайтов</li><li>Приоритетная генерация</li><li>Премиум поддержка</li></ul><a href="https://t.me/papijonofff_bot" target="_blank" class="btn btn-secondary">Выбрать</a></div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2>Создайте свою историю</h2>
+        <p>Позвольте технологиям будущего работать на ваш бизнес сегодня.</p>
+        <a href="https://t.me/papijonofff_bot" target="_blank" class="btn">Перейти в Telegram</a>
+    </section>
+
+    <footer>
+        <p>WebCraft AI &copy; 2026. Искусство в каждой строке кода.</p>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.setAttribute('data-theme', 'dark');
+        }
+
+        // --- ЗАГРУЗКА ОТЗЫВОВ ИЗ reviews.json ---
+        async function loadReviews() {
+            const container = document.getElementById('reviews-container');
+            
+            try {
+                // Добавляем случайный параметр, чтобы браузер не кэшировал старые отзывы
+                const response = await fetch('reviews.json?t=' + new Date().getTime());
+                
+                if (!response.ok) {
+                    throw new Error('Файл с отзывами не найден');
+                }
+                
+                const reviews = await response.json();
+                
+                if (reviews.length === 0) {
+                    container.innerHTML = '<p style="color: var(--text-muted); grid-column: 1 / -1;">Пока нет отзывов. Станьте первым!</p>';
+                    return;
+                }
+
+                container.innerHTML = ''; // Очищаем "Загрузку..."
+                
+                reviews.forEach(review => {
+                    const card = document.createElement('div');
+                    card.className = 'review-card';
+                    card.innerHTML = `
+                        <div class="review-quote">"</div>
+                        <div class="review-text">${review.text}</div>
+                        <div class="review-author">${review.author} <span style="font-weight: 400; text-transform: none; opacity: 0.6; font-size: 0.9rem; display: block; margin-top: 5px;">${review.date}</span></div>
+                    `;
+                    container.appendChild(card);
+                });
+                
+            } catch (error) {
+                console.error(error);
+                container.innerHTML = '<p style="color: var(--text-muted); grid-column: 1 / -1;">Не удалось загрузить отзывы. Попробуйте позже.</p>';
+            }
+        }
+
+        // Запускаем загрузку при открытии страницы
+        window.onload = loadReviews;
+    </script>
+</body>
+</html>
