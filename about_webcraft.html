@@ -1,731 +1,374 @@
-Вот готовый одностраничный лендинг для Telegram-бота **WebCraft AI**. Код полностью автономный (HTML + CSS + JS в одном файле), текст на русском, есть переключатель темы, плавные анимации и современный дизайн.
-
-
 <!DOCTYPE html>
-<html lang="ru" data-theme="dark">
+<html lang="ru">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>WebCraft AI — сайты за секунды с помощью ИИ</title>
-<style>
-  /* ---------- Базовые переменные и темы ---------- */
-  :root {
-    --bg: #0b0f1a;
-    --bg-soft: #121826;
-    --card: rgba(255, 255, 255, 0.04);
-    --card-border: rgba(255, 255, 255, 0.08);
-    --text: #e8ecf5;
-    --text-soft: #9aa4b8;
-    --accent: #6a5cff;
-    --accent-2: #22d3ee;
-    --accent-glow: rgba(106, 92, 255, 0.45);
-    --btn-text: #ffffff;
-    --shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
-    --grad: linear-gradient(135deg, #6a5cff 0%, #22d3ee 100%);
-  }
-
-  [data-theme="light"] {
-    --bg: #f6f7fb;
-    --bg-soft: #ffffff;
-    --card: #ffffff;
-    --card-border: rgba(0, 0, 0, 0.08);
-    --text: #141824;
-    --text-soft: #5b6478;
-    --accent: #5b4dff;
-    --accent-2: #0891b2;
-    --accent-glow: rgba(91, 77, 255, 0.25);
-    --btn-text: #ffffff;
-    --shadow: 0 20px 50px rgba(20, 24, 36, 0.12);
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    font-family: 'Segoe UI', system-ui, -apple-system, 'Inter', Roboto, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.6;
-    overflow-x: hidden;
-    transition: background 0.4s ease, color 0.4s ease;
-  }
-
-  /* Фоновое свечение */
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(600px circle at 15% 10%, var(--accent-glow), transparent 45%),
-      radial-gradient(700px circle at 85% 5%, rgba(34, 211, 238, 0.18), transparent 45%);
-    pointer-events: none;
-    z-index: -1;
-  }
-
-  .container {
-    width: min(1120px, 92%);
-    margin: 0 auto;
-  }
-
-  /* ---------- Навигация ---------- */
-  header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    background: color-mix(in srgb, var(--bg) 70%, transparent);
-    border-bottom: 1px solid var(--card-border);
-  }
-
-  nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 0;
-  }
-
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 800;
-    font-size: 1.2rem;
-    letter-spacing: 0.3px;
-  }
-
-  .logo-mark {
-    width: 34px;
-    height: 34px;
-    border-radius: 10px;
-    background: var(--grad);
-    display: grid;
-    place-items: center;
-    font-size: 18px;
-    box-shadow: 0 6px 20px var(--accent-glow);
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 28px;
-    list-style: none;
-  }
-
-  .nav-links a {
-    color: var(--text-soft);
-    text-decoration: none;
-    font-size: 0.95rem;
-    transition: color 0.25s;
-  }
-
-  .nav-links a:hover { color: var(--text); }
-
-  .theme-btn {
-    background: var(--card);
-    border: 1px solid var(--card-border);
-    color: var(--text);
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
-    cursor: pointer;
-    font-size: 1.15rem;
-    display: grid;
-    place-items: center;
-    transition: transform 0.25s, border-color 0.25s, background 0.25s;
-  }
-
-  .theme-btn:hover {
-    transform: rotate(-15deg) scale(1.05);
-    border-color: var(--accent);
-  }
-
-  /* ---------- Hero ---------- */
-  .hero {
-    padding: 100px 0 80px;
-    text-align: center;
-    position: relative;
-  }
-
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    border-radius: 100px;
-    border: 1px solid var(--card-border);
-    background: var(--card);
-    font-size: 0.85rem;
-    color: var(--text-soft);
-    margin-bottom: 28px;
-    animation: fadeUp 0.8s ease both;
-  }
-
-  .badge .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #22c55e;
-    box-shadow: 0 0 12px #22c55e;
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.35; }
-  }
-
-  .hero h1 {
-    font-size: clamp(2.2rem, 5.5vw, 4.2rem);
-    font-weight: 800;
-    line-height: 1.12;
-    letter-spacing: -1.5px;
-    animation: fadeUp 0.9s 0.05s ease both;
-  }
-
-  .grad-text {
-    background: var(--grad);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .hero p {
-    max-width: 620px;
-    margin: 22px auto 38px;
-    color: var(--text-soft);
-    font-size: clamp(1rem, 1.6vw, 1.15rem);
-    animation: fadeUp 1s 0.15s ease both;
-  }
-
-  /* Кнопка Telegram */
-  .cta-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    padding: 18px 38px;
-    border-radius: 16px;
-    background: var(--grad);
-    color: var(--btn-text);
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 1.05rem;
-    box-shadow: 0 14px 40px var(--accent-glow);
-    position: relative;
-    overflow: hidden;
-    animation: fadeUp 1s 0.25s ease both;
-    transition: transform 0.3s, box-shadow 0.3s;
-  }
-
-  .cta-btn::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -120%;
-    width: 60%;
-    height: 100%;
-    background: linear-gradient(100deg, transparent, rgba(255,255,255,0.45), transparent);
-    transform: skewX(-20deg);
-    transition: left 0.7s;
-  }
-
-  .cta-btn:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 22px 55px var(--accent-glow);
-  }
-
-  .cta-btn:hover::after { left: 140%; }
-
-  .hero-orb {
-    position: absolute;
-    width: 320px;
-    height: 320px;
-    border-radius: 50%;
-    filter: blur(90px);
-    opacity: 0.35;
-    z-index: -1;
-  }
-
-  .orb-1 { background: var(--accent); top: 40px; left: -60px; animation: float 8s ease-in-out infinite; }
-  .orb-2 { background: var(--accent-2); bottom: -40px; right: -80px; animation: float 10s ease-in-out infinite reverse; }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0) }
-    50% { transform: translateY(-30px) }
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(26px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* ---------- Секции ---------- */
-  section { padding: 90px 0; }
-
-  .section-head {
-    text-align: center;
-    max-width: 640px;
-    margin: 0 auto 60px;
-  }
-
-  .section-head h2 {
-    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-    font-weight: 800;
-    letter-spacing: -0.8px;
-    margin-bottom: 14px;
-  }
-
-  .section-head p {
-    color: var(--text-soft);
-    font-size: 1.05rem;
-  }
-
-  /* ---------- Карточки фич ---------- */
-  .features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 24px;
-  }
-
-  .feature-card {
-    background: var(--card);
-    border: 1px solid var(--card-border);
-    border-radius: 22px;
-    padding: 34px 28px;
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.35s ease, border-color 0.35s, box-shadow 0.35s;
-  }
-
-  .feature-card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(300px circle at var(--mx, 50%) var(--my, 0%), var(--accent-glow), transparent 60%);
-    opacity: 0;
-    transition: opacity 0.35s;
-    pointer-events: none;
-  }
-
-  .feature-card:hover {
-    transform: translateY(-8px);
-    border-color: var(--accent);
-    box-shadow: var(--shadow);
-  }
-
-  .feature-card:hover::before { opacity: 1; }
-
-  .feature-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 16px;
-    display: grid;
-    place-items: center;
-    font-size: 26px;
-    margin-bottom: 22px;
-    background: color-mix(in srgb, var(--accent) 18%, transparent);
-    border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
-  }
-
-  .feature-card h3 {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-  }
-
-  .feature-card p {
-    color: var(--text-soft);
-    font-size: 0.97rem;
-  }
-
-  /* ---------- Тарифы ---------- */
-  .pricing-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 24px;
-    align-items: stretch;
-  }
-
-  .price-card {
-    background: var(--card);
-    border: 1px solid var(--card-border);
-    border-radius: 24px;
-    padding: 36px 30px;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.35s, border-color 0.35s, box-shadow 0.35s;
-    position: relative;
-  }
-
-  .price-card:hover {
-    transform: translateY(-8px);
-    border-color: var(--accent);
-    box-shadow: var(--shadow);
-  }
-
-  .price-card.popular {
-    border: 1px solid transparent;
-    background:
-      linear-gradient(var(--card), var(--card)) padding-box,
-      var(--grad) border-box;
-  }
-
-  .popular-tag {
-    position: absolute;
-    top: -14px;
-    right: 24px;
-    background: var(--grad);
-    color: #fff;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.8px;
-    padding: 6px 14px;
-    border-radius: 100px;
-    text-transform: uppercase;
-  }
-
-  .price-card h3 {
-    font-size: 1.1rem;
-    color: var(--text-soft);
-    font-weight: 600;
-    margin-bottom: 18px;
-  }
-
-  .price {
-    font-size: 2.6rem;
-    font-weight: 800;
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-    margin-bottom: 6px;
-  }
-
-  .price span {
-    font-size: 1rem;
-    color: var(--text-soft);
-    font-weight: 500;
-  }
-
-  .price-sub {
-    color: var(--text-soft);
-    font-size: 0.9rem;
-    margin-bottom: 26px;
-  }
-
-  .price-card ul {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 30px;
-    flex: 1;
-  }
-
-  .price-card ul li {
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-    color: var(--text-soft);
-    font-size: 0.95rem;
-  }
-
-  .price-card ul li::before {
-    content: "✓";
-    color: var(--accent-2);
-    font-weight: 700;
-    flex-shrink: 0;
-  }
-
-  .plan-btn {
-    text-align: center;
-    padding: 14px;
-    border-radius: 14px;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 0.95rem;
-    color: var(--text);
-    border: 1px solid var(--card-border);
-    background: transparent;
-    transition: all 0.3s;
-  }
-
-  .plan-btn:hover {
-    border-color: var(--accent);
-    background: color-mix(in srgb, var(--accent) 12%, transparent);
-  }
-
-  .price-card.popular .plan-btn {
-    background: var(--grad);
-    color: #fff;
-    border: none;
-    box-shadow: 0 10px 28px var(--accent-glow);
-  }
-
-  .price-card.popular .plan-btn:hover {
-    transform: scale(1.02);
-  }
-
-  /* ---------- Финальный CTA ---------- */
-  .final-cta {
-    text-align: center;
-    padding: 90px 0 110px;
-  }
-
-  .final-cta h2 {
-    font-size: clamp(1.9rem, 4vw, 3rem);
-    font-weight: 800;
-    letter-spacing: -1px;
-    margin-bottom: 18px;
-  }
-
-  .final-cta p {
-    color: var(--text-soft);
-    max-width: 520px;
-    margin: 0 auto 36px;
-  }
-
-  /* ---------- Появление при скролле ---------- */
-  .reveal {
-    opacity: 0;
-    transform: translateY(36px);
-    transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-  }
-
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* ---------- Футер ---------- */
-  footer {
-    border-top: 1px solid var(--card-border);
-    padding: 30px 0;
-    text-align: center;
-    color: var(--text-soft);
-    font-size: 0.88rem;
-  }
-
-  @media (max-width: 720px) {
-    .nav-links { display: none; }
-    .hero { padding: 70px 0 60px; }
-    section { padding: 70px 0; }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebCraft AI — Создай сайт за секунды</title>
+    <style>
+        /* Цветовые переменные для светлой темы */
+        :root {
+            --bg-color: #f4f7f6;
+            --text-color: #2d3436;
+            --primary-color: #6c5ce7;
+            --secondary-color: #a29bfe;
+            --card-bg: #ffffff;
+            --nav-bg: rgba(244, 247, 246, 0.85);
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Цветовые переменные для темной темы */
+        [data-theme="dark"] {
+            --bg-color: #0f0f13;
+            --text-color: #dfe6e9;
+            --primary-color: #a29bfe;
+            --secondary-color: #6c5ce7;
+            --card-bg: #1a1a24;
+            --nav-bg: rgba(15, 15, 19, 0.85);
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        /* --- Навигация --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--nav-bg);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(128, 128, 128, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            letter-spacing: -0.5px;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 2px solid var(--primary-color);
+            color: var(--text-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        /* --- Главный экран --- */
+        header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 120px 20px 60px;
+            background: radial-gradient(circle at 50% 50%, var(--card-bg) 0%, var(--bg-color) 70%);
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            max-width: 900px;
+        }
+
+        h1 span {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            max-width: 600px;
+            margin-bottom: 40px;
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        /* --- Кнопки --- */
+        .btn-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 36px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(108, 92, 231, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(108, 92, 231, 0.6);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(108, 92, 231, 0.1);
+            transform: translateY(-3px);
+        }
+
+        /* --- Секции --- */
+        .section {
+            padding: 100px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            font-weight: 800;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+            border: 1px solid rgba(128, 128, 128, 0.05);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .card p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            opacity: 0.8;
+        }
+
+        /* --- Секция тарифов --- */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .price-card {
+            background: var(--card-bg);
+            padding: 50px 30px;
+            border-radius: 24px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .price-card.popular {
+            border-color: var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        .price-card.popular::before {
+            content: 'Популярный выбор';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-color);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .price-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .price-value {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+
+        .price-desc {
+            opacity: 0.7;
+            margin-bottom: 30px;
+            font-size: 1rem;
+        }
+
+        /* --- Футер --- */
+        footer {
+            text-align: center;
+            padding: 40px;
+            border-top: 1px solid rgba(128, 128, 128, 0.1);
+            opacity: 0.6;
+            font-size: 0.95rem;
+        }
+
+        /* --- Адаптивность --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .section-title { font-size: 2rem; }
+            nav { padding: 15px 20px; }
+            .price-card.popular { transform: scale(1); }
+        }
+    </style>
 </head>
 <body>
 
-<!-- ================= HEADER ================= -->
-<header>
-  <div class="container">
+    <!-- Навигация -->
     <nav>
-      <div class="logo">
-        <div class="logo-mark">⚡</div>
-        <span>WebCraft <span class="grad-text">AI</span></span>
-      </div>
-      <ul class="nav-links">
-        <li><a href="#features">Возможности</a></li>
-        <li><a href="#pricing">Тарифы</a></li>
-        <li><a href="#start">Начать</a></li>
-      </ul>
-      <button class="theme-btn" id="themeToggle" aria-label="Переключить тему">🌙</button>
+        <div class="logo">WebCraft AI</div>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙 Тема</button>
     </nav>
-  </div>
-</header>
 
-<!-- ================= HERO ================= -->
-<section class="hero">
-  <div class="hero-orb orb-1"></div>
-  <div class="hero-orb orb-2"></div>
-  <div class="container">
-    <div class="badge">
-      <span class="dot"></span>
-      Работает на искусственном интеллекте
-    </div>
-    <h1>
-      Создавай сайты<br />
-      <span class="grad-text">за секунды с ИИ</span>
-    </h1>
-    <p>
-      WebCraft AI — Telegram-бот, который превращает вашу идею в готовый современный сайт.
-      Опишите, что нужно — и получите результат мгновенно. Без кода и дизайнеров.
-    </p>
-    <a class="cta-btn" href="https://t.me/papijonofff_bot" target="_blank" rel="noopener">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-        <path d="M21.94 4.3c-.2-.85-.9-1.05-1.55-.8L2.4 10.6c-.9.35-.88 1.6.03 1.9l4.6 1.5 1.75 5.55c.24.75 1.15.94 1.66.36l2.5-2.85 4.55 3.36c.7.5 1.7.13 1.9-.7l2.55-15.4zM9.3 13.6l8.9-6.6c.3-.22.62.15.37.4l-7.3 6.9-.3 3.1-1.67-3.8z"/>
-      </svg>
-      Открыть бота в Telegram
-    </a>
-  </div>
-</section>
+    <!-- Главный экран -->
+    <header>
+        <h1>Создай свой сайт за <span>30 секунд</span></h1>
+        <p class="hero-subtitle">Наш искусственный интеллект напишет чистый код за тебя. Просто опиши идею — получи готовый HTML-файл с современным дизайном!</p>
+        
+        <div class="btn-group">
+            <!-- Кнопка ведет напрямую в бота -->
+            <a href="https://t.me/papijonofff_bot" class="btn btn-primary" target="_blank">🚀 Перейти в бота</a>
+            <a href="#pricing" class="btn btn-secondary">💎 Узнать тарифы</a>
+        </div>
+    </header>
 
-<!-- ================= FEATURES ================= -->
-<section id="features">
-  <div class="container">
-    <div class="section-head reveal">
-      <h2>Сайты за <span class="grad-text">секунды</span></h2>
-      <p>Всё, что нужно для запуска — уже внутри бота. Просто напишите, что хотите создать.</p>
+    <!-- Секция преимуществ -->
+    <div class="section">
+        <h2 class="section-title">Почему WebCraft AI?</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>⚡ Мгновенно</h3>
+                <p>Генерация полноценного сайта занимает меньше минуты. Не нужно ждать и писать код вручную.</p>
+            </div>
+            <div class="card">
+                <h3>🎨 Уникально</h3>
+                <p>Каждый раз нейросеть подбирает новый стиль, анимации и цветовую гамму. Сайты не повторяются.</p>
+            </div>
+            <div class="card">
+                <h3>🛠 Легко</h3>
+                <p>Получаешь один HTML-файл, который легко открыть в браузере или загрузить на любой хостинг.</p>
+            </div>
+        </div>
     </div>
 
-    <div class="features-grid">
-      <div class="feature-card reveal">
-        <div class="feature-icon">⚡</div>
-        <h3>Молниеносная генерация</h3>
-        <p>Опишите идею одним сообщением — и получите готовую структуру и дизайн сайта за считанные секунды.</p>
-      </div>
+    <!-- Секция тарифов -->
+    <div class="section" id="pricing" style="background: var(--card-bg); border-radius: 40px;">
+        <h2 class="section-title">Выгодные тарифы</h2>
+        <div class="pricing-grid">
+            
+            <div class="price-card">
+                <div class="price-title">Разовый заказ</div>
+                <div class="price-value">15 ⭐</div>
+                <div class="price-desc">Один базовый сайт</div>
+                <a href="https://t.me/papijonofff_bot" class="btn btn-secondary" target="_blank">Купить в боте</a>
+            </div>
 
-      <div class="feature-card reveal">
-        <div class="feature-icon">🎨</div>
-        <h3>Современный дизайн</h3>
-        <p>ИИ подбирает стиль, шрифты, цвета и адаптивную вёрстку — результат выглядит премиально на любом устройстве.</p>
-      </div>
+            <div class="price-card popular">
+                <div class="price-title">Подписка Старт</div>
+                <div class="price-value">60 ⭐</div>
+                <div class="price-desc">5 базовых сайтов (Выгода 15 ⭐)</div>
+                <a href="https://t.me/papijonofff_bot" class="btn btn-primary" target="_blank">Купить в боте</a>
+            </div>
 
-      <div class="feature-card reveal">
-        <div class="feature-icon">🧠</div>
-        <h3>Умный контент</h3>
-        <p>Бот сам придумает заголовки, тексты и структуру блоков под вашу нишу — от лендинга до портфолио.</p>
-      </div>
+            <div class="price-card">
+                <div class="price-title">Подписка Про</div>
+                <div class="price-value">140 ⭐</div>
+                <div class="price-desc">5 стандартных сайтов</div>
+                <a href="https://t.me/papijonofff_bot" class="btn btn-secondary" target="_blank">Купить в боте</a>
+            </div>
 
-      <div class="feature-card reveal">
-        <div class="feature-icon">🚀</div>
-        <h3>Без кода</h3>
-        <p>Не нужно знать HTML, CSS или JavaScript. Всё, что требуется — ваша идея и несколько слов о ней.</p>
-      </div>
-
-      <div class="feature-card reveal">
-        <div class="feature-icon">📱</div>
-        <h3>Прямо в Telegram</h3>
-        <p>Запускайте и получайте сайты прямо из мессенджера — без установки приложений и регистраций.</p>
-      </div>
-
-      <div class="feature-card reveal">
-        <div class="feature-icon">💾</div>
-        <h3>Готово к публикации</h3>
-        <p>Получите готовый результат, который можно сразу использовать и развивать под свои задачи.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= PRICING ================= -->
-<section id="pricing">
-  <div class="container">
-    <div class="section-head reveal">
-      <h2>Тарифы в <span class="grad-text">Telegram Stars</span></h2>
-      <p>Оплачивайте звёздами прямо в боте — быстро, безопасно и без карт.</p>
+        </div>
     </div>
 
-    <div class="pricing-grid">
-      <div class="price-card reveal">
-        <h3>Старт</h3>
-        <div class="price">⭐ 50 <span>Stars</span></div>
-        <div class="price-sub">Для первых экспериментов</div>
-        <ul>
-          <li>3 генерации сайта</li>
-          <li>Базовые шаблоны</li>
-          <li>Экспорт результата</li>
-          <li>Поддержка в чате</li>
-        </ul>
-        <a class="plan-btn" href="https://t.me/papijonofff_bot" target="_blank" rel="noopener">Выбрать тариф</a>
-      </div>
+    <!-- Футер -->
+    <footer>
+        <p>&copy; 2026 WebCraft AI. Все права защищены.</p>
+        <p style="margin-top: 10px;">Работает на базе Telegram и DeepSeek.</p>
+    </footer>
 
-      <div class="price-card popular reveal">
-        <div class="popular-tag">Популярный</div>
-        <h3>Про</h3>
-        <div class="price">⭐ 150 <span>Stars</span></div>
-        <div class="price-sub">Оптимально для старта проекта</div>
-        <ul>
-          <li>15 генераций сайта</li>
-          <li>Все премиум-шаблоны</li>
-          <li>Генерация текстов ИИ</li>
-          <li>Приоритетная поддержка</li>
-        </ul>
-        <a class="plan-btn" href="https://t.me/papijonofff_bot" target="_blank" rel="noopener">Выбрать тариф</a>
-      </div>
-
-      <div class="price-card reveal">
-        <h3>Бизнес</h3>
-        <div class="price">⭐ 400 <span>Stars</span></div>
-        <div class="price-sub">Для агентств и команд</div>
-        <ul>
-          <li>Безлимитные генерации</li>
-          <li>Все функции «Про»</li>
-          <li>Экспорт в чистый код</li>
-          <li>Личный менеджер</li>
-        </ul>
-        <a class="plan-btn" href="https://t.me/papijonofff_bot" target="_blank" rel="noopener">Выбрать тариф</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= FINAL CTA ================= -->
-<section class="final-cta" id="start">
-  <div class="container reveal">
-    <h2>Готовы создать <span class="grad-text">свой сайт?</span></h2>
-    <p>Откройте бота в Telegram и получите первый сайт уже через минуту. Это бесплатно и просто.</p>
-    <a class="cta-btn" href="https://t.me/papijonofff_bot" target="_blank" rel="noopener">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-        <path d="M21.94 4.3c-.2-.85-.9-1.05-1.55-.8L2.4 10.6c-.9.35-.88 1.6.03 1.9l4.6 1.5 1.75 5.55c.24.75 1.15.94 1.66.36l2.5-2.85 4.55 3.36c.7.5 1.7.13 1.9-.7l2.55-15.4zM9.3 13.6l8.9-6.6c.3-.22.62.15.37.4l-7.3 6.9-.3 3.1-1.67-3.8z"/>
-      </svg>
-      Запустить WebCraft AI
-    </a>
-  </div>
-</section>
-
-<!-- ================= FOOTER ================= -->
-<footer>
-  <div class="container">
-    © 2025 WebCraft AI — сайты с искусственным интеллектом
-  </div>
-</footer>
-
-<script>
-  /* ---------- Переключатель темы ---------- */
-  const root = document.documentElement;
-  const toggle = document.getElementById('themeToggle');
-  const savedTheme = localStorage.getItem('wc-theme');
-
-  function applyTheme(theme) {
-    root.setAttribute('data-theme', theme);
-    toggle.textContent = theme === 'dark' ? '🌙' : '☀️';
-    localStorage.setItem('wc-theme', theme);
-  }
-
-  applyTheme(savedTheme || 'dark');
-
-  toggle.addEventListener('click', () => {
-    const current = root.getAttribute('data-theme');
-    applyTheme(current === 'dark' ? 'light' : 'dark');
-  });
-
-  /* ---------- Появление при скролле ---------- */
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), i * 90);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.15 });
-
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-  /* ---------- Подсветка карточек курсором ---------- */
-  document.querySelectorAll('.feature-card').forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      card.style.setProperty('--mx', `${e.clientX - rect.left}px`);
-      card.style.setProperty('--my', `${e.clientY - rect.top}px`);
-    });
-  });
-</script>
+    <!-- Скрипт переключения темы -->
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        
+        // Проверяем сохраненную тему при загрузке
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.setAttribute('data-theme', 'dark');
+        }
+    </script>
 </body>
 </html>
-
-
-### Что внутри:
-- **Hero** с крупным заголовком, градиентным акцентом и заметной кнопкой «Открыть бота в Telegram», ведущей на `https://t.me/papijonofff_bot`.
-- **Блок возможностей** — 6 карточек с плавным появлением при скролле и подсветкой под курсором.
-- **Тарифы в Telegram Stars** (Старт / Про / Бизнес) с выделенным популярным планом.
-- **Переключатель тем** (🌙/☀️) с сохранением выбора в `localStorage`.
-- **Плавные анимации**: fadeUp при загрузке, появление секций по скроллу, hover-эффекты, «блик» на кнопке.
-- **Адаптивность** — сетки перестраиваются под мобильные, меню скрывается на узких экранах.
