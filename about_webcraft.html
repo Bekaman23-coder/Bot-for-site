@@ -341,16 +341,7 @@
             font-size: 0.9rem;
         }
 
-        /* --- Адаптивность --- */
-        @media (max-width: 768px) {
-            .nav-right a:not(.nav-btn) { display: none; } /* Скрываем лишние ссылки на телефоне */
-            .hero h1 { font-size: 2.8rem; }
-            .section-title { font-size: 2.2rem; }
-            .cta-section h2 { font-size: 2rem; }
-            .price-card.popular { transform: scale(1); }
-        }
-    </style>
-    /* --- Cookie Banner --- */
+        /* --- Cookie Banner --- */
         .cookie-banner {
             position: fixed;
             bottom: 20px;
@@ -423,25 +414,26 @@
             background: var(--bg);
         }
 
+        /* --- Адаптивность --- */
         @media (max-width: 768px) {
-            .cookie-banner {
-                flex-direction: column;
-                text-align: center;
-                padding: 20px;
-            }
+            .nav-right a:not(.nav-btn) { display: none; }
+            .hero h1 { font-size: 2.8rem; }
+            .section-title { font-size: 2.2rem; }
+            .cta-section h2 { font-size: 2rem; }
+            .price-card.popular { transform: scale(1); }
+            .cookie-banner { flex-direction: column; text-align: center; padding: 20px; }
         }
+    </style>
 </head>
 <body>
 
     <!-- Шапка сайта -->
     <nav>
-        <!-- Иконка и логотип (возврат на главную) -->
         <a href="#" class="nav-left" onclick="window.scrollTo(0,0); return false;">
             <svg viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2zm0 3.8l7.5 15.2H4.5L12 5.8zM11 10v5h2v-5h-2zm0 6v2h2v-2h-2z"/></svg>
             <span>WebCraft AI</span>
         </a>
         
-        <!-- Меню справа -->
         <div class="nav-right">
             <a href="#about">О нас</a>
             <a href="#how-it-works">Как работаем</a>
@@ -551,8 +543,20 @@
         <p style="margin-top: 10px; font-size: 0.8rem;">Сделано с любовью и нейросетями.</p>
     </footer>
 
-    <!-- Скрипт переключения тем -->
+    <!-- Баннер Cookie -->
+    <div id="cookie-banner" class="cookie-banner">
+        <div class="cookie-text">
+            🍪 Мы используем файлы cookie для улучшения работы сайта. Продолжая просмотр, вы соглашаетесь с нашей <a href="#" onclick="alert('Здесь будет ваша политика конфиденциальности'); return false;">Политикой конфиденциальности</a>.
+        </div>
+        <div class="cookie-buttons">
+            <button class="cookie-btn decline" onclick="declineCookies()">Отклонить</button>
+            <button class="cookie-btn accept" onclick="acceptCookies()">Принять</button>
+        </div>
+    </div>
+
+    <!-- Скрипты -->
     <script>
+        // --- Логика темной темы ---
         function toggleTheme() {
             const body = document.body;
             const btn = document.querySelector('.theme-toggle');
@@ -568,91 +572,39 @@
             }
         }
         
-        // Проверяем сохраненную тему при загрузке
         if (localStorage.getItem('theme') === 'dark') {
             document.body.setAttribute('data-theme', 'dark');
             document.querySelector('.theme-toggle').innerText = '☀️';
-                 /* --- Cookie Banner --- */
-.cookie-banner {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    right: 20px;
-    max-width: 800px;
-    margin: 0 auto;
-    background: var(--card);
-    color: var(--text);
-    padding: 20px 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    z-index: 9999;
-    border: 1px solid var(--border);
-    transform: translateY(150%);
-    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.cookie-banner.show {
-    transform: translateY(0);
-}
-
-.cookie-text {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    line-height: 1.4;
-}
-
-.cookie-text a {
-    color: var(--primary);
-    text-decoration: none;
-}
-
-.cookie-buttons {
-    display: flex;
-    gap: 10px;
-    flex-shrink: 0;
-}
-
-.cookie-btn {
-    padding: 10px 20px;
-    border-radius: 12px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    border: none;
-    transition: 0.2s;
-}
-
-.cookie-btn.accept {
-    background: var(--primary);
-    color: white;
-}
-
-.cookie-btn.accept:hover {
-    background: var(--primary-hover);
-}
-
-.cookie-btn.decline {
-    background: transparent;
-    color: var(--text-muted);
-    border: 1px solid var(--border);
-}
-
-.cookie-btn.decline:hover {
-    background: var(--bg);
-}
-
-@media (max-width: 768px) {
-    .cookie-banner {
-        flex-direction: column;
-        text-align: center;
-        padding: 20px;
-    }
-}
         }
+
+        // --- Логика Cookie ---
+        function checkCookies() {
+            const banner = document.getElementById('cookie-banner');
+            if (!localStorage.getItem('cookie_consent')) {
+                setTimeout(() => {
+                    banner.classList.add('show');
+                }, 1000);
+            }
+        }
+
+        function acceptCookies() {
+            localStorage.setItem('cookie_consent', 'accepted');
+            hideCookieBanner();
+        }
+
+        function declineCookies() {
+            localStorage.setItem('cookie_consent', 'declined');
+            hideCookieBanner();
+        }
+
+        function hideCookieBanner() {
+            const banner = document.getElementById('cookie-banner');
+            banner.classList.remove('show');
+        }
+
+        window.onload = function() {
+            checkCookies();
+        };
     </script>
 </body>
 </html>
