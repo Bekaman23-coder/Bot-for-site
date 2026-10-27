@@ -572,6 +572,36 @@
         if (localStorage.getItem('theme') === 'dark') {
             document.body.setAttribute('data-theme', 'dark');
             document.querySelector('.theme-toggle').innerText = '☀️';
+                    // --- Логика Cookie ---
+        function checkCookies() {
+            const banner = document.getElementById('cookie-banner');
+            if (!localStorage.getItem('cookie_consent')) {
+                // Если пользователь еще не выбрал, показываем баннер через 1 секунду
+                setTimeout(() => {
+                    banner.classList.add('show');
+                }, 1000);
+            }
+        }
+
+        function acceptCookies() {
+            localStorage.setItem('cookie_consent', 'accepted');
+            hideCookieBanner();
+        }
+
+        function declineCookies() {
+            localStorage.setItem('cookie_consent', 'declined');
+            hideCookieBanner();
+        }
+
+        function hideCookieBanner() {
+            const banner = document.getElementById('cookie-banner');
+            banner.classList.remove('show');
+        }
+
+        // Проверяем куки при загрузке страницы
+        window.onload = function() {
+            checkCookies();
+        };
         }
     </script>
 </body>
